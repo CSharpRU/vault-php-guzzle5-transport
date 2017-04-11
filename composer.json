@@ -1,5 +1,5 @@
 {
-    "name": "csharpru/vault-php-guzzle5-trasnport",
+    "name": "csharpru/vault-php-guzzle5-transport",
     "description": "Guzzle5 transport for Vault PHP client",
     "type": "library",
     "license": "MIT",
