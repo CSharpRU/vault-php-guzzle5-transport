@@ -30,11 +30,14 @@ class Guzzle5Transport implements Transport
     /**
      * Guzzle5Transport constructor.
      *
+     * @param array  $config
      * @param Client $client
      */
-    public function __construct(Client $client)
+    public function __construct(array $config = [], Client $client = null)
     {
-        $this->client = $client;
+        $config = array_merge(['base_url' => 'http://127.0.0.1:8200', 'exceptions' => false], $config);
+
+        $this->client = $client ?: new Client($config);
     }
 
     /**
