@@ -9,6 +9,7 @@ use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Ring\Future\FutureInterface;
+use GuzzleHttp\Stream\Stream;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -84,12 +85,13 @@ class Guzzle5Transport implements Transport
      * @param array            $options
      *
      * @return \GuzzleHttp\Message\FutureResponse|\GuzzleHttp\Message\ResponseInterface|FutureInterface|null
+     * @throws \InvalidArgumentException
      * @throws \Vault\Exceptions\TransportException
      */
     protected function rawSend(RequestInterface $request, array $options)
     {
         $oldRequest = new Request($request->getMethod(), $request->getUri(), $request->getHeaders(),
-            (string)$request->getBody(), $options);
+            Stream::factory((string)$request->getBody()), $options);
 
         try {
             return $this->client->send($oldRequest);
