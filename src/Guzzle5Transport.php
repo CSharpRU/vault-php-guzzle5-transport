@@ -4,12 +4,10 @@ namespace VaultTransports;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
-use GuzzleHttp\Message\Request;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Ring\Future\FutureInterface;
-use GuzzleHttp\Stream\Stream;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -54,6 +52,7 @@ class Guzzle5Transport implements Transport
      * @param array               $options Request options to apply.
      *
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      * @throws TransportException
      */
     public function request($method, $uri, array $options = [])
@@ -70,6 +69,7 @@ class Guzzle5Transport implements Transport
      *                                  request and to the transfer.
      *
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      * @throws TransportException
      */
     public function send(RequestInterface $request, array $options = [])
@@ -90,8 +90,14 @@ class Guzzle5Transport implements Transport
      */
     protected function rawSend(RequestInterface $request, array $options)
     {
-        $oldRequest = new Request($request->getMethod(), $request->getUri(), $request->getHeaders(),
-            Stream::factory((string)$request->getBody()), $options);
+        $oldRequest = $this->client->createRequest(
+            $request->getMethod(),
+            $request->getUri(),
+            array_merge($options, [
+                'headers' => $request->getHeaders(),
+                'body' => (string)$request->getBody(),
+            ])
+        );
 
         try {
             return $this->client->send($oldRequest);
@@ -113,6 +119,7 @@ class Guzzle5Transport implements Transport
      * @param array               $options Request options to apply.
      *
      * @return PromiseInterface
+     * @throws \InvalidArgumentException
      * @throws \Vault\Exceptions\TransportException
      */
     public function requestAsync($method, $uri, array $options = [])
@@ -129,6 +136,7 @@ class Guzzle5Transport implements Transport
      *                                  request and to the transfer.
      *
      * @return PromiseInterface
+     * @throws \InvalidArgumentException
      * @throws \Vault\Exceptions\TransportException
      */
     public function sendAsync(RequestInterface $request, array $options = [])
