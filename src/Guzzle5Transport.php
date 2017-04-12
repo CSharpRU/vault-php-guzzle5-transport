@@ -89,7 +89,7 @@ class Guzzle5Transport implements Transport
     protected function rawSend(RequestInterface $request, array $options)
     {
         $oldRequest = new Request($request->getMethod(), $request->getUri(), $request->getHeaders(),
-            $request->getBody(), $options);
+            (string)$request->getBody(), $options);
 
         try {
             return $this->client->send($oldRequest);
