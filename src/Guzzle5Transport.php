@@ -93,10 +93,7 @@ class Guzzle5Transport implements Transport
         $oldRequest = $this->client->createRequest(
             $request->getMethod(),
             $request->getUri(),
-            array_merge($options, [
-                'headers' => $request->getHeaders(),
-                'body' => (string)$request->getBody(),
-            ])
+            $request->getHeaders() ? array_merge($options, ['headers' => $request->getHeaders()]) : $options
         );
 
         try {
