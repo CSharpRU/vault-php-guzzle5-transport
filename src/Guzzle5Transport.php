@@ -38,10 +38,8 @@ class Guzzle5Transport implements Transport
         $config = array_merge_recursive(
             [
                 'base_url' => 'http://127.0.0.1:8200',
-                [
-                    'defaults' => [
-                        'exceptions' => false,
-                    ],
+                'defaults' => [
+                    'exceptions' => false,
                 ],
             ],
             $config
