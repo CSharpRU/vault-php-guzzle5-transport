@@ -35,14 +35,12 @@ class Guzzle5Transport implements Transport
      */
     public function __construct(array $config = [], Client $client = null)
     {
-        $config = array_merge_recursive(
-            [
-                'base_url' => 'http://127.0.0.1:8200',
-                'defaults' => [
-                    'exceptions' => false,
-                ],
-            ],
-            $config
+        $config = array_merge(['base_url' => 'http://127.0.0.1:8200'], $config);
+
+        // additionally override defaults
+        $config['defaults'] = array_merge(
+            isset($config['defaults']) ? $config['defaults'] : [],
+            ['exceptions' => false]
         );
 
         $this->client = $client ?: new Client($config);
