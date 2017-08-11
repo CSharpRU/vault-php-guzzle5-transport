@@ -39,6 +39,7 @@ class Guzzle5Transport implements Transport
 
         // additionally override defaults
         $config['defaults'] = array_merge(
+            ['timeout' => 15],
             isset($config['defaults']) ? $config['defaults'] : [],
             ['exceptions' => false]
         );
